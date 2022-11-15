@@ -65,9 +65,26 @@ select * from car;
 select * from Accident;
 select * from person;
 select * from participated order by damage_amount desc ;
-select accident_date, location from Accident;
-select driver_id from Participated where damage_amount >= 25000;
+select avg(damage_amount) from participated;
+select damage_amount from participated having damage_amount < avg(damage_amount);
 
+update participated
+set damage_amout=25000
+where reg_num='KA053408' and report_num=12;
+
+SHOW TABLES;
+
+select count(distinct driver_id) CNT
+from participated a, accident b
+where a.report_num=b.report_num and b.accident_date like '2008%';
+
+insert into accident values(17,'2008-03-08',"Domlur");
+
+select * from accident;
+
+select accident_date, location from accident;
+
+select driver_id from participated where damage_amount>=25000;
 
 
 
