@@ -1,3 +1,4 @@
+
 create database 060_insurance;
 use 060_insurance;
 create table person(
@@ -69,8 +70,8 @@ select avg(damage_amount) from participated;
 select damage_amount from participated having damage_amount < avg(damage_amount);
 
 update participated
-set damage_amout=25000
-where reg_num='KA053408' and report_num=12;
+set damage_amount=25000
+where reg_num='KA053408' and report_num='12';
 
 SHOW TABLES;
 
