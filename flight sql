@@ -1,0 +1,58 @@
+create database Airline;
+use Airline;
+
+create table flights(
+flno int, ffrom varchar(50), tto varchar(50), distance int, departs time, arrives time, price int,
+primary key(flno));
+
+create table aircraft(
+aid int, aname varchar(50), cruisingrange int,
+primary key(aid));
+
+create table employee(
+eid int, ename varchar(50), salary int,
+primary key(eid));
+
+create table certified(
+eid int,aid int,
+foreign key(aid) references aircraft(aid)
+on update cascade on delete cascade,
+foreign key(eid) references employee(eid)
+on update cascade on delete cascade);
+
+
+
+insert into employee values(101,'Avinash',50000),(102,'Lokesh',60000),(103,'Rakesh',70000),(104,'Santhosh',82000),
+(105,'Tilak',5000);
+
+insert into aircraft values(1,'Airbus',2000),(2,'Boeing',700),(3,'JetAirways',550),(4,'Indigo',5000),
+(5,'Boeing',4500),(6,'Airbus',2200);
+
+insert into certified values(101,2),(101,4),(101,5),(101,6),(102,1),(102,3),(102,5),(103,2),(103,3),(103,5),(103,6),(104,6),(104,1),(104,3),
+(105,3);
+
+insert into flights values
+(1,'Banglore','New Delhi',500,'6:00','9:00',5000),
+(2,'Banglore','Chennai',300,'7:00','8:30',3000),
+(3,'Trivandrum','New Delhi',800,'8:00','11:30',6000),
+(4,'Banglore','Frankfurt',10000,'6:00','23:30',50000),
+(5,'Kolkata','New Delhi',2400,'11:00','3:30',9000),
+(6,'Banglore','Frankfurt',8000,'9:00','23:00',40000);
+
+
+
+select aname from aircraft where aid in (select aid from certified where eid in ( select eid from employee where salary>80000));
+
+select  c.eid , max(a.cruisingrange) from certified c, aircraft a where c.aid=a.aid  group by c.eid having count(*)>=3;
+
+
+
+select e.ename from employee e where e.salary<(select min(price) from flights where ffrom = 'Banglore' and tto='Frankfurt');
+
+select aname, aid from aircraft where cruisingrange> 1000;
+
+select ename from employee where eid in(
+select eid from certified e where e.aid in (select a.aid from aircraft a where aname='Boeing') group by e.eid);
+
+select aid from aircraft where cruisingrange>
+(select distance from flights where ffrom='Banglore'and tto='New Delhi');
